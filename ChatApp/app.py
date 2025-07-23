@@ -25,72 +25,44 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 bundle_css_files(app)
 
 
-# ルートページのリダイレクト処理
-@app.route('/', methods=['GET'])
-def index():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-    return redirect(url_for('channels_view'))
+
+# 会員登録画面表示
+@app.route('/register', methods=['GET'])
+def register_view():
+    return render_template('auth/register.html')
 
 
-# サインアップページの表示
-@app.route('/signup', methods=['GET'])
-def signup_view():
-    return render_template('auth/signup.html')
-
-
-# サインアップ処理
-@app.route('/signup', methods=['POST'])
-def signup_process():
-    name = request.form.get('name')
+# 会員登録処理
+@app.route('/register', methods=['POST'])
+def register_process():
+    name = request.form.get('user_name')
     email = request.form.get('email')
     password = request.form.get('password')
-    passwordConfirmation = request.form.get('password-confirmation')
-
-    if name == '' or email =='' or password == '' or passwordConfirmation == '':
-        flash('空のフォームがあるようです')
-    elif password != passwordConfirmation:
-        flash('二つのパスワードの値が違っています')
-    elif re.match(EMAIL_PATTERN, email) is None:
-        flash('正しいメールアドレスの形式ではありません')
-    else:
-        uid = uuid.uuid4()
-        password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-        registered_user = User.find_by_email(email)
-
-        if registered_user != None:
-            flash('既に登録されているようです')
-        else:
-            User.create(uid, name, email, password)
-            UserId = str(uid)
-            session['uid'] = UserId
-            return redirect(url_for('channels_view'))
-    return redirect(url_for('signup_process'))
+    passwordConfirmation = request.form.get('password_Confirmation')
 
 
-# ログインページの表示
+# ログイン画面表示
 @app.route('/login', methods=['GET'])
 def login_view():
     return render_template('auth/login.html')
 
 
-# ログイン処理
-@app.route('/login', methods=['POST'])
+# ログイン操作  email, password
+@app.route('login', methods=['POST'])
 def login_process():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    if email =='' or password == '':
+    if email =='' or password =='':
         flash('空のフォームがあるようです')
     else:
         user = User.find_by_email(email)
         if user is None:
             flash('このユーザーは存在しません')
         else:
-            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest
             if hashPassword != user["password"]:
-                flash('パスワードが間違っています！')
+                flash('パスワードが間違っています')
             else:
                 session['uid'] = user["uid"]
                 return redirect(url_for('channels_view'))
@@ -100,119 +72,198 @@ def login_process():
 # ログアウト
 @app.route('/logout')
 def logout():
-    session.clear()
     return redirect(url_for('login_view'))
 
 
-# チャンネル一覧ページの表示
-@app.route('/channels', methods=['GET'])
-def channels_view():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-    else:
-        channels = Channel.get_all()
-        channels.reverse()
-        return render_template('channels.html', channels=channels, uid=uid)
+
+# # ルートページのリダイレクト処理
+# @app.route('/', methods=['GET'])
+# def index():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+#     return redirect(url_for('channels_view'))
 
 
-# チャンネルの作成
-@app.route('/channels', methods=['POST'])
-def create_channel():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-
-    channel_name = request.form.get('channelTitle')
-    channel = Channel.find_by_name(channel_name)
-    if channel == None:
-        channel_description = request.form.get('channelDescription')
-        Channel.create(uid, channel_name, channel_description)
-        return redirect(url_for('channels_view'))
-    else:
-        error = '既に同じ名前のチャンネルが存在しています'
-        return render_template('error/error.html', error_message=error)
+# # サインアップページの表示
+# @app.route('/signup', methods=['GET'])
+# def signup_view():
+#     return render_template('auth/signup.html')
 
 
-# チャンネルの更新
-@app.route('/channels/update/<cid>', methods=['POST'])
-def update_channel(cid):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
+# # サインアップ処理
+# @app.route('/signup', methods=['POST'])
+# def signup_process():
+#     name = request.form.get('name')
+#     email = request.form.get('email')
+#     password = request.form.get('password')
+#     passwordConfirmation = request.form.get('password-confirmation')
 
-    channel_name = request.form.get('channelTitle')
-    channel_description = request.form.get('channelDescription')
+#     if name == '' or email =='' or password == '' or passwordConfirmation == '':
+#         flash('空のフォームがあるようです')
+#     elif password != passwordConfirmation:
+#         flash('二つのパスワードの値が違っています')
+#     elif re.match(EMAIL_PATTERN, email) is None:
+#         flash('正しいメールアドレスの形式ではありません')
+#     else:
+#         uid = uuid.uuid4()
+#         password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+#         registered_user = User.find_by_email(email)
 
-    Channel.update(uid, channel_name, channel_description, cid)
-    return redirect(f'/channels/{cid}/messages')
-
-
-# チャンネルの削除
-@app.route('/channels/delete/<cid>', methods=['POST'])
-def delete_channel(cid):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-
-    channel = Channel.find_by_cid(cid)
-
-    if channel["uid"] != uid:
-        flash('チャンネルは作成者のみ削除可能です')
-    else:
-        Channel.delete(cid)
-    return redirect(url_for('channels_view'))
-
-
-# チャンネル詳細ページの表示（各チャンネル内で、そのチャンネルに属している全メッセージを表示させる）
-@app.route('/channels/<cid>/messages', methods=['GET'])
-def detail(cid):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-
-    channel = Channel.find_by_cid(cid)
-    messages = Message.get_all(cid)
-
-    return render_template('messages.html', messages=messages, channel=channel, uid=uid)
+#         if registered_user != None:
+#             flash('既に登録されているようです')
+#         else:
+#             User.create(uid, name, email, password)
+#             UserId = str(uid)
+#             session['uid'] = UserId
+#             return redirect(url_for('channels_view'))
+#     return redirect(url_for('signup_process'))
 
 
-# メッセージの投稿
-@app.route('/channels/<cid>/messages', methods=['POST'])
-def create_message(cid):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-
-    message = request.form.get('message')
-
-    if message:
-        Message.create(uid, cid, message)
-
-    return redirect('/channels/{cid}/messages'.format(cid = cid))
+# # ログインページの表示
+# @app.route('/login', methods=['GET'])
+# def login_view():
+#     return render_template('auth/login.html')
 
 
-# メッセージの削除
-@app.route('/channels/<cid>/messages/<message_id>', methods=['POST'])
-def delete_message(cid, message_id):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
+# # ログイン処理
+# @app.route('/login', methods=['POST'])
+# def login_process():
+#     email = request.form.get('email')
+#     password = request.form.get('password')
 
-    if message_id:
-        Message.delete(message_id)
-    return redirect('/channels/{cid}/messages'.format(cid = cid))
+#     if email =='' or password == '':
+#         flash('空のフォームがあるようです')
+#     else:
+#         user = User.find_by_email(email)
+#         if user is None:
+#             flash('このユーザーは存在しません')
+#         else:
+#             hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+#             if hashPassword != user["password"]:
+#                 flash('パスワードが間違っています！')
+#             else:
+#                 session['uid'] = user["uid"]
+#                 return redirect(url_for('channels_view'))
+#     return redirect(url_for('login_view'))
 
 
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('error/404.html'),404
+# # ログアウト
+# @app.route('/logout')
+# def logout():
+#     session.clear()
+#     return redirect(url_for('login_view'))
 
 
-@app.errorhandler(500)
-def internal_server_error(error):
-    return render_template('error/500.html'),500
+# # チャンネル一覧ページの表示
+# @app.route('/channels', methods=['GET'])
+# def channels_view():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+#     else:
+#         channels = Channel.get_all()
+#         channels.reverse()
+#         return render_template('channels.html', channels=channels, uid=uid)
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+# # チャンネルの作成
+# @app.route('/channels', methods=['POST'])
+# def create_channel():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+
+#     channel_name = request.form.get('channelTitle')
+#     channel = Channel.find_by_name(channel_name)
+#     if channel == None:
+#         channel_description = request.form.get('channelDescription')
+#         Channel.create(uid, channel_name, channel_description)
+#         return redirect(url_for('channels_view'))
+#     else:
+#         error = '既に同じ名前のチャンネルが存在しています'
+#         return render_template('error/error.html', error_message=error)
+
+
+# # チャンネルの更新
+# @app.route('/channels/update/<cid>', methods=['POST'])
+# def update_channel(cid):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+
+#     channel_name = request.form.get('channelTitle')
+#     channel_description = request.form.get('channelDescription')
+
+#     Channel.update(uid, channel_name, channel_description, cid)
+#     return redirect(f'/channels/{cid}/messages')
+
+
+# # チャンネルの削除
+# @app.route('/channels/delete/<cid>', methods=['POST'])
+# def delete_channel(cid):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+
+#     channel = Channel.find_by_cid(cid)
+
+#     if channel["uid"] != uid:
+#         flash('チャンネルは作成者のみ削除可能です')
+#     else:
+#         Channel.delete(cid)
+#     return redirect(url_for('channels_view'))
+
+
+# # チャンネル詳細ページの表示（各チャンネル内で、そのチャンネルに属している全メッセージを表示させる）
+# @app.route('/channels/<cid>/messages', methods=['GET'])
+# def detail(cid):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+
+#     channel = Channel.find_by_cid(cid)
+#     messages = Message.get_all(cid)
+
+#     return render_template('messages.html', messages=messages, channel=channel, uid=uid)
+
+
+# # メッセージの投稿
+# @app.route('/channels/<cid>/messages', methods=['POST'])
+# def create_message(cid):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+
+#     message = request.form.get('message')
+
+#     if message:
+#         Message.create(uid, cid, message)
+
+#     return redirect('/channels/{cid}/messages'.format(cid = cid))
+
+
+# # メッセージの削除
+# @app.route('/channels/<cid>/messages/<message_id>', methods=['POST'])
+# def delete_message(cid, message_id):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+
+#     if message_id:
+#         Message.delete(message_id)
+#     return redirect('/channels/{cid}/messages'.format(cid = cid))
+
+
+# @app.errorhandler(404)
+# def page_not_found(error):
+#     return render_template('error/404.html'),404
+
+
+# @app.errorhandler(500)
+# def internal_server_error(error):
+#     return render_template('error/500.html'),500
+
+
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", debug=True)
