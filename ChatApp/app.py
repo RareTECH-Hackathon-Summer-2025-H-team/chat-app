@@ -9,7 +9,7 @@ from models import User, Channel, Message
 from util.assets import bundle_css_files
 
 
-# 定数定義
+# 定数定義　　　正規表現の確認をする
 EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 SESSION_DAYS = 30
 
@@ -40,6 +40,26 @@ def register_process():
     password = request.form.get('password')
     passwordConfirmation = request.form.get('password_Confirmation')
 
+    if name == '' or email == '' or password == '' or passwordConfirmation == '':
+        flash('空のフォームがあるようです')
+    elif password != passwordConfirmation:
+        flash('パスワードが一致しません')
+    elif re.match(EMAIL_PATTERN, email):
+        flash('正しいメールアドレスの形式ではありません')
+    else:
+        user_id = uuid.uuid4()          # ユニークなユーザーidを付与 128ビット　ランダム
+        password = hashlib.sha256(password.encode('utf-8')).hexdigest()     #パスワードのハッシュ化
+        registered_use = User.find_by_email(email)      # Userクラスのクラスメソット
+
+        if registered_use != None:
+            flash('既に登録されています')
+        else:
+            User.create(user_id, email, password)
+            UserId = str(user_id)
+            session['user_id'] = UserId
+            return redirect (url_for('categories_views'))
+    return redirect(url_for('register_process'))
+
 
 # ログイン画面表示
 @app.route('/login', methods=['GET'])
@@ -64,16 +84,53 @@ def login_process():
             if hashPassword != user["password"]:
                 flash('パスワードが間違っています')
             else:
-                session['uid'] = user["uid"]
-                return redirect(url_for('channels_view'))
+                session['user_id'] = user["user_id"]
+                return redirect(url_for('categories_view'))
     return redirect(url_for('login_view'))
 
 
 # ログアウト
-@app.route('/logout')
-def logout():
+@app.route('/logout', methods=['POST'])           # ←URLは必要ないか？？
+def logout_process():
     return redirect(url_for('login_view'))
 
+
+# カテゴリ画面表示　←ホーム
+@app.route('/categories', methods=['GET'])
+def categories_view():
+    return render_template('auth/categories.html')
+
+
+# カテゴリ内の都道府県一覧表示
+# 不要？？
+
+
+# 特定の都道府県内のスポット一覧表示
+@app.route('/spots/<category_id>/<prefecture_id>', methods=['GET'])
+def spots_view():
+    return redirect(url_for('spots_view'))
+
+# スポット詳細の表示
+@app.route('/auth/spots/spot_id', methods=['GET'])
+def spot_room_view(spot_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+
+
+# メッセージの投稿
+@app.route('/spots/<spot_id>/messages', methods=['POST'])
+def create_message(spot_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    message = request.form.get('message')
+
+    if message:
+        Message.create(user_id, spot_id, message)
+    
+    return redirect('/<spot_id>/messages'.format(spot_id = spot_id))
 
 
 # # ルートページのリダイレクト処理
