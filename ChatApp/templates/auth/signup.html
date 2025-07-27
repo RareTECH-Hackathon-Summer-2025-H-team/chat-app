@@ -1,5 +1,5 @@
 {% extends 'auth/base.html' %} {% block title %}
-<title>signup</title>
+<title>アカウント登録</title>
 {% endblock %} {% block body %}
 <div class="auth-wrapper">
   <div class="auth-container">
@@ -14,10 +14,13 @@
           alt="logo"
         />
       </div>
+      <a class="switch-auth-mode" href="{{ url_for('login_view') }}">
+            ＜戻る
+       </a>
       <form class="auth-form signup" method="post">
-        <h1 class="auth-title">HI THERE!</h1>
+        <h1 class="auth-title">アカウント登録</h1>
         <div>
-          <label for="signup-name-input">Name</label>
+          <label for="signup-name-input">アカウント名</label>
           <input
             type="text"
             placeholder="Name"
@@ -26,7 +29,7 @@
           />
         </div>
         <div>
-          <label for="signup-email-input">Email</label>
+          <label for="signup-email-input">メールアドレス</label>
           <input
             type="text"
             placeholder="Email"
@@ -35,7 +38,7 @@
           />
         </div>
         <div>
-          <label for="signup-password-input">Password</label>
+          <label for="signup-password-input">パスワード</label>
           <input
             type="password"
             placeholder="Password"
@@ -62,10 +65,8 @@
             {% endfor %}
           </ul>
           {% endif %} {% endwith %}
-          <button class="auth-button pink">SIGN UP</button>
-          <a class="switch-auth-mode" href="{{ url_for('login_view') }}">
-            ログインする
-          </a>
+          <button class="auth-button pink">サインアップ</button>
+          
         </div>
       </form>
     </div>
