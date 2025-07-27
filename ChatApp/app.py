@@ -62,13 +62,13 @@ def register_process():
 
 
 # ログイン画面表示
-@app.route('/login', methods=['GET'])
-def login_view():
-    return render_template('auth/login.html')
+# @app.route('/login', methods=['GET'])
+# def login_view():
+#     return render_template('auth/login.html')
 
 
 # ログイン操作  email, password
-@app.route('login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login_process():
     email = request.form.get('email')
     password = request.form.get('password')
@@ -133,13 +133,13 @@ def create_message(spot_id):
     return redirect('/<spot_id>/messages'.format(spot_id = spot_id))
 
 
-# # ルートページのリダイレクト処理
-# @app.route('/', methods=['GET'])
-# def index():
-#     uid = session.get('uid')
-#     if uid is None:
-#         return redirect(url_for('login_view'))
-#     return redirect(url_for('channels_view'))
+# ルートページのリダイレクト処理
+@app.route('/', methods=['GET'])
+def index():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('channels_view'))
 
 
 # # サインアップページの表示
@@ -177,10 +177,10 @@ def create_message(spot_id):
 #     return redirect(url_for('signup_process'))
 
 
-# # ログインページの表示
-# @app.route('/login', methods=['GET'])
-# def login_view():
-#     return render_template('auth/login.html')
+# ログインページの表示
+@app.route('/login', methods=['GET'])
+def login_view():
+    return render_template('auth/login.html')
 
 
 # # ログイン処理
@@ -212,16 +212,16 @@ def create_message(spot_id):
 #     return redirect(url_for('login_view'))
 
 
-# # チャンネル一覧ページの表示
-# @app.route('/channels', methods=['GET'])
-# def channels_view():
-#     uid = session.get('uid')
-#     if uid is None:
-#         return redirect(url_for('login_view'))
-#     else:
-#         channels = Channel.get_all()
-#         channels.reverse()
-#         return render_template('channels.html', channels=channels, uid=uid)
+# チャンネル一覧ページの表示
+@app.route('/channels', methods=['GET'])
+def channels_view():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    else:
+        channels = Channel.get_all()
+        channels.reverse()
+        return render_template('channels.html', channels=channels, uid=uid)
 
 
 # # チャンネルの作成
@@ -322,5 +322,5 @@ def create_message(spot_id):
 #     return render_template('error/500.html'),500
 
 
-# if __name__ == '__main__':
-#     app.run(host="0.0.0.0", debug=True)
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
