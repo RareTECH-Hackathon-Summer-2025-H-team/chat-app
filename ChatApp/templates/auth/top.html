@@ -1,0 +1,12 @@
+{% extends 'auth/base.html' %}
+{% block titile %}
+<title>top</title>
+{% endblock %}
+{% block body %}
+<div>
+    <header>
+        <a href="{{ url_for('signup_view')}}">アカウント</a>  
+        <a href="{{ url_for('login_view')}}">ログアウト</a>
+    </header>
+
+</div>
