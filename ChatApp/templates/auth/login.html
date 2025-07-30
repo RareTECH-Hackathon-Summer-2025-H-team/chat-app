@@ -2,44 +2,42 @@
 <title>login</title>
 {% endblock %}{% block body %}
 <div class="wrapper">
-  <div class="container">
-    <form method="post">
-      <h1 class="auth-title">Fising Chat</h1>
-      <div>
-        <label for="email-input" class="auth-email">メールアドレス</label><br>
-        <input
-          type="text"
-          placeholder="メールアドレスを入力してください"
-          name="email"
-          id="email-input"
-        />  
-      </div>
-      <div>
-        <label for="password-input" class="auth-password">パスワード</label><br>
-        <input
-          type="password"
-          placeholder="パスワードを入力してください"
-          name="password"
-          id="password-input"
-        />
-      </div>
-      <div>
-        {% with message = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-          {% for message in messages %}
-          <li>{{message}}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        <button class="auth-button">ログインして進む</button>
-      </div>
-      <div>
-        <button class="auth-button">新規会員登録</button>
-        <p>会員登録がお済みでない方</p>
-      </div>
-    </form>
-  </div>
+  <form method="post">
+    <h1 class="auth-title">Fising Chat</h1>
+    <div>
+      <label for="email-input" class="auth-email">メールアドレス</label><br>
+      <input class="auth-text"
+        type="text"
+        placeholder="メールアドレスを入力してください"
+        name="email"
+        id="email-input"
+      />  
+    </div>
+    <div>
+      <label for="password-input" class="auth-password">パスワード</label><br>
+      <input class="auth-text"
+        type="password"
+        placeholder="パスワードを入力してください"
+        name="password"
+        id="password-input"
+      />
+    </div>
+    <div>
+      {% with message = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+      <button class="auth-button">ログインして進む</button>
+    </div>
+    <div>
+      <button class="auth-button">新規会員登録</button>
+      <p class="guidance">会員登録がお済みでない方</p>
+    </div>
+  </form>
 </div>
 {% endblock %}

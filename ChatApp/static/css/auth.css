@@ -6,14 +6,43 @@
   font-size: 20px;
 }
 
-h1 {
+.auth-title {
   font-size: 48px;
 }
 
 .auth-email {
+  margin: 0%;
   font-weight: bold;
+
 }
 
 .auth-password {
   font-weight: bold;
 }
+
+.auth-text {
+  display: inline-block;
+  margin: 10px;
+  width: 60%;
+  height: 40px;
+}
+
+.auth-button {
+  display: inline-block;
+  margin: 10px;
+  padding: 20px, 20px;
+  width: 60%;
+  height: 40px;
+  background-color: rgb(108, 233, 239);
+  font-size: 20px;
+}
+.auth-button:hover {
+  background-color: rgb(184, 229, 237);
+}
+
+.guidance {
+  font-size: 16px;
+  color: rgb(121, 117, 117);
+  margin: 0%;
+}
+
