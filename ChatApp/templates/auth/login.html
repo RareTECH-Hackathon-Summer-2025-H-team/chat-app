@@ -1,14 +1,12 @@
-{% extends 'auth/base.html' %} 
-{% block title %}
+{% extends 'auth/base.html' %} {% block title %}
 <title>login</title>
-{% endblock %}
-{% block body %}
+{% endblock %}{% block body %}
 <div class="wrapper">
   <div class="container">
     <form method="post">
       <h1 class="auth-title">Fising Chat</h1>
       <div>
-        <label for="email-input" class="auth-email">メールアドレス</label>
+        <label for="email-input" class="auth-email">メールアドレス</label><br>
         <input
           type="text"
           placeholder="メールアドレスを入力してください"
@@ -17,7 +15,7 @@
         />  
       </div>
       <div>
-        <label for="password-input" class="auth-password">パスワード</label>
+        <label for="password-input" class="auth-password">パスワード</label><br>
         <input
           type="password"
           placeholder="パスワードを入力してください"
