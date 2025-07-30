@@ -1,58 +1,47 @@
-{% extends 'auth/base.html' %} {% block title %}
+{% extends 'auth/base.html' %} 
+{% block title %}
 <title>login</title>
-{% endblock %} {% block body %}
-<div class="auth-wrapper">
-  <div class="auth-container">
-    <img
-      src="{{ url_for('static',filename='img/auth.png') }}"
-      class="auth-main-pic"
-    />
-    <img
-      src="{{ url_for('static',filename='img/mobile-auth.png') }}"
-      class="auth-mobile-pic"
-    />
-    <div class="auth-form-wrapper">
-      <div class="auth-logo">
-        <img
-          src="{{ url_for('static',filename='img/plaudern-logo.png') }}"
-          alt="logo"
+{% endblock %}
+{% block body %}
+<div class="wrapper">
+  <div class="container">
+    <form method="post">
+      <h1 class="auth-title">Fising Chat</h1>
+      <div>
+        <label for="email-input" class="auth-email">メールアドレス</label>
+        <input
+          type="text"
+          placeholder="メールアドレスを入力してください"
+          name="email"
+          id="email-input"
+        />  
+      </div>
+      <div>
+        <label for="password-input" class="auth-password">パスワード</label>
+        <input
+          type="password"
+          placeholder="パスワードを入力してください"
+          name="password"
+          id="password-input"
         />
       </div>
-      <form class="auth-form" method="post">
-        <h1 class="auth-title">WELCOME BACK!</h1>
-        <div>
-          <label for="email-input">Email</label>
-          <input
-            type="text"
-            placeholder="Email"
-            name="email"
-            id="email-input"
-          />
-        </div>
-        <div>
-          <label for="password-input">Password</label>
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            id="password-input"
-          />
-        </div>
-        <div class="auth-button-container">
-          {% with messages = get_flashed_messages() %} {% if messages %}
-          <ul class="flashes">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %} {% endwith %}
-          <button class="auth-button pink">LOGIN</button>
-          <a class="switch-auth-mode" href="{{ url_for('signup_view') }}">
-            登録はこちら
-          </a>
-        </div>
-      </form>
-    </div>
+      <div>
+        {% with message = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{message}}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        <button class="auth-button">ログインして進む</button>
+      </div>
+      <div>
+        <button class="auth-button">新規会員登録</button>
+        <p>会員登録がお済みでない方</p>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}
