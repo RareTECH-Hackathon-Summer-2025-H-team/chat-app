@@ -6,6 +6,16 @@
   font-size: 20px;
 }
 
+.register-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.back {
+  margin-left: 20%;
+}
+
+
 .auth-title {
   font-size: 48px;
 }
@@ -19,6 +29,11 @@
 .auth-password {
   font-weight: bold;
 }
+
+.auth-name {
+  font-weight: bold;
+}
+
 
 .auth-text {
   display: inline-block;
