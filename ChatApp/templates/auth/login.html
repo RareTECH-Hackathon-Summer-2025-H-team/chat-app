@@ -35,8 +35,8 @@
       <button class="auth-button">ログインして進む</button>
     </div>
     <div>
-      <button class="auth-button">新規会員登録</button>
-      <p class="guidance">会員登録がお済みでない方</p>
+      <a href="{{ url_for('register_view') }}" class="auth-button">新規会員登録</a>
+        <p class="guidance">会員登録がお済みでない方</p>
     </div>
   </form>
 </div>

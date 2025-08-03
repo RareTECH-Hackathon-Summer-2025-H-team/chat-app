@@ -1,3 +1,6 @@
+
+
+#######元ファイル##########################
 from flask import abort
 import pymysql
 from util.DB import DB
@@ -10,15 +13,15 @@ db_pool = DB.init_db_pool()
 # ユーザークラス
 class User:
    @classmethod
-   def create(cls, user_id, name, email, password):
+   def create(cls, uid, name, email, password):
        # データベース接続プールからコネクションを取得する
        conn = db_pool.get_conn()
        try:
             # コネクションからカーソル（操作用のオブジェクト）を取得する
            with conn.cursor() as cur:
-               sql = "INSERT INTO users (user_id, user_name, email, password) VALUES (%s, %s, %s, %s);"
-               # SQLを実行し、パラメータ（user_id, name, email, password）を埋め込む
-               cur.execute(sql, (user_id, name, email, password,))
+               sql = "INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s);"
+               # SQLを実行し、パラメータ（uid, name, email, password）を埋め込む
+               cur.execute(sql, (uid, name, email, password,))
                # データベースに変更を反映（保存）する
                conn.commit()
        except pymysql.Error as e:
@@ -47,12 +50,12 @@ class User:
 # チャンネルクラス
 class Channel:
    @classmethod
-   def create(cls, user_id, new_channel_name, new_channel_description):
+   def create(cls, uid, new_channel_name, new_channel_description):
        conn = db_pool.get_conn()
        try:
            with conn.cursor() as cur:
-               sql = "INSERT INTO channels (user_id, name, abstract) VALUES (%s, %s, %s);"
-               cur.execute(sql, (uesr_id, new_channel_name, new_channel_description,))
+               sql = "INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);"
+               cur.execute(sql, (uid, new_channel_name, new_channel_description,))
                conn.commit()
        except pymysql.Error as e:
            print(f'エラーが発生しています：{e}')
@@ -110,12 +113,12 @@ class Channel:
 
 
    @classmethod
-   def update(cls, user_id, new_channel_name, new_channel_description, cid):
+   def update(cls, uid, new_channel_name, new_channel_description, cid):
        conn = db_pool.get_conn()
        try:
            with conn.cursor() as cur:
-               sql = "UPDATE channels SET user_id=%s, name=%s, abstract=%s WHERE id=%s;"
-               cur.execute(sql, (user_id, new_channel_name, new_channel_description, cid,))
+               sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
+               cur.execute(sql, (uid, new_channel_name, new_channel_description, cid,))
                conn.commit()
        except pymysql.Error as e:
            print(f'エラーが発生しています：{e}')
@@ -142,12 +145,12 @@ class Channel:
 # メッセージクラス
 class Message:
    @classmethod
-   def create(cls, user_id, cid, message):
+   def create(cls, uid, cid, message):
        conn = db_pool.get_conn()
        try:
            with conn.cursor() as cur:
-               sql = "INSERT INTO messages(user_id, cid, message) VALUES(%s, %s, %s)"
-               cur.execute(sql, (user_id, cid, message,))
+               sql = "INSERT INTO messages(uid, cid, message) VALUES(%s, %s, %s)"
+               cur.execute(sql, (uid, cid, message,))
                conn.commit()
        except pymysql.Error as e:
            print(f'エラーが発生しています：{e}')
@@ -162,9 +165,9 @@ class Message:
        try:
            with conn.cursor() as cur:
                sql = """
-                   SELECT id, u.user_id, user_name, message 
+                   SELECT id, u.uid, user_name, message 
                    FROM messages AS m 
-                   INNER JOIN users AS u ON m.user_id = u.user_id 
+                   INNER JOIN users AS u ON m.uid = u.uid 
                    WHERE cid = %s 
                    ORDER BY id ASC;
                """

@@ -19,118 +19,10 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 # ブラウザに静的ファイル（CSSや画像など）を長くキャッシュさせる設定。
 # 開発中は変更がすぐ反映されないことがあるため、コメントアウトするのが無難です。
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
+# app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 
 # 複数のCSSファイルを1つにまとめて圧縮（バンドル）する処理を実行。
 bundle_css_files(app)
-
-
-
-# 会員登録画面表示
-@app.route('/register', methods=['GET'])
-def register_view():
-    return render_template('auth/register.html')
-
-
-# 会員登録処理
-@app.route('/register', methods=['POST'])
-def register_process():
-    name = request.form.get('user_name')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    passwordConfirmation = request.form.get('password_Confirmation')
-
-    if name == '' or email == '' or password == '' or passwordConfirmation == '':
-        flash('空のフォームがあるようです')
-    elif password != passwordConfirmation:
-        flash('パスワードが一致しません')
-    elif re.match(EMAIL_PATTERN, email):
-        flash('正しいメールアドレスの形式ではありません')
-    else:
-        user_id = uuid.uuid4()          # ユニークなユーザーidを付与 128ビット　ランダム
-        password = hashlib.sha256(password.encode('utf-8')).hexdigest()     #パスワードのハッシュ化
-        registered_use = User.find_by_email(email)      # Userクラスのクラスメソット
-
-        if registered_use != None:
-            flash('既に登録されています')
-        else:
-            User.create(user_id, email, password)
-            UserId = str(user_id)
-            session['user_id'] = UserId
-            return redirect (url_for('categories_views'))
-    return redirect(url_for('register_process'))
-
-
-# ログイン画面表示
-# @app.route('/login', methods=['GET'])
-# def login_view():
-#     return render_template('auth/login.html')
-
-
-# ログイン操作  email, password
-@app.route('/login', methods=['POST'])
-def login_process():
-    email = request.form.get('email')
-    password = request.form.get('password')
-
-    if email =='' or password =='':
-        flash('空のフォームがあるようです')
-    else:
-        user = User.find_by_email(email)
-        if user is None:
-            flash('このユーザーは存在しません')
-        else:
-            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest
-            if hashPassword != user["password"]:
-                flash('パスワードが間違っています')
-            else:
-                session['user_id'] = user["user_id"]
-                return redirect(url_for('categories_view'))
-    return redirect(url_for('login_view'))
-
-
-# ログアウト
-@app.route('/logout', methods=['POST'])           # ←URLは必要ないか？？
-def logout_process():
-    return redirect(url_for('login_view'))
-
-
-# カテゴリ画面表示　←ホーム
-@app.route('/categories', methods=['GET'])
-def categories_view():
-    return render_template('auth/categories.html')
-
-
-# カテゴリ内の都道府県一覧表示
-# 不要？？
-
-
-# 特定の都道府県内のスポット一覧表示
-@app.route('/spots/<category_id>/<prefecture_id>', methods=['GET'])
-def spots_view():
-    return redirect(url_for('spots_view'))
-
-# スポット詳細の表示
-@app.route('/auth/spots/spot_id', methods=['GET'])
-def spot_room_view(spot_id):
-    user_id = session.get('user_id')
-    if user_id is None:
-        return redirect(url_for('login_view'))
-
-
-# メッセージの投稿
-@app.route('/spots/<spot_id>/messages', methods=['POST'])
-def create_message(spot_id):
-    user_id = session.get('user_id')
-    if user_id is None:
-        return redirect(url_for('login_view'))
-    
-    message = request.form.get('message')
-
-    if message:
-        Message.create(user_id, spot_id, message)
-    
-    return redirect('/<spot_id>/messages'.format(spot_id = spot_id))
 
 
 # ルートページのリダイレクト処理
@@ -140,6 +32,231 @@ def index():
     if uid is None:
         return redirect(url_for('login_view'))
     return redirect(url_for('channels_view'))
+
+
+ # 会員登録ページの表示
+@app.route('/register', methods=['GET'])
+def register_view():
+    return render_template('auth/register.html')
+
+
+# 会員登録処理
+@app.route('/register', methods=['POST'])
+def register_process():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    passwordConfirmation = request.form.get('password-confirmation')
+
+    if name == '' or email =='' or password == '' or passwordConfirmation == '':
+        flash('空のフォームがあるようです')
+    elif password != passwordConfirmation:
+        flash('二つのパスワードの値が違っています')
+    elif re.match(EMAIL_PATTERN, email) is None:
+        flash('正しいメールアドレスの形式ではありません')
+    else:
+        uid = uuid.uuid4()
+        password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        registered_user = User.find_by_email(email)
+
+        if registered_user != None:
+            flash('既に登録されているようです')
+        else:
+            User.create(uid, name, email, password)
+            UserId = str(uid)
+            session['uid'] = UserId
+            return redirect(url_for('channels_view'))
+    return redirect(url_for('signup_process'))
+
+
+# ログインページの表示
+@app.route('/login', methods=['GET'])
+def login_view():
+    return render_template('auth/login.html')
+
+
+# ログイン処理
+@app.route('/login', methods=['POST'])
+def login_process():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if email =='' or password == '':
+        flash('空のフォームがあるようです')
+    else:
+        user = User.find_by_email(email)
+        if user is None:
+            flash('このユーザーは存在しません')
+        else:
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if hashPassword != user["password"]:
+                flash('パスワードが間違っています！')
+            else:
+                session['uid'] = user["uid"]
+                return redirect(url_for('channels_view'))
+    return redirect(url_for('login_view'))
+
+
+# ログアウト
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login_view'))
+
+
+# カテゴリ画面表示
+@app.route('/categories', methods=['GET'])
+def categories_view():
+    return render_template('auth/categories.html')
+
+
+# # カテゴリ内の都道府県一覧表示
+# @app.route('/categories/<category_id>', methods=['GET'])
+# def prefectures_view(category_id):
+#     category_id = session.get(category_id)
+#     if category_id is None:
+#         return redirect(url_for('login_view'))
+    
+#     category = Category.find_by_category_id(category_id)                #←ここ確認
+
+#     return render_template('/auth/categories.html', category=category)   #←ここ確認
+
+
+# # 特定の都道府県内のスポットルーム一覧表示
+# @app.route('/spots/<category_id>/<prefecture_id>', methods=['GET'])     #←ここ確認
+# def spots_view(category_id, prefecture_id):
+#     category_id = session.get(category_id)
+#     prefecture_id = session.get(prefecture_id)
+#     if category_id is None or prefecture_id is None:
+#         return redirect(url_for('login_view'))
+    
+#     spot = Spot.find_by_spot_id(spot_id)                                #←ここ確認
+
+#     return render_template('/auth/spots.html', spot=spot)                #←ここ確認
+
+
+# #スポットルームの作成
+# @app.route('/spots/<category_id/<prefecture_id>', methods=['POST'])     #←ここ確認
+# def create_spot_room(spot_id):
+#     if spot_id is None:
+#         return redirect(url_for('login_view'))
+    
+#     spot_name = request.fort.get('spotTitle')                           #←ここ確認
+#     spot = Spot.find_by_name(spot_name)
+#     if spot == None:
+#         Spot.create(category_id, prefectue_id, spot_name)               #←ここ確認
+#         return redirect(url_for('spots_view'))
+#     else:
+#         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
+
+
+# # スポットルームの表示
+# @app.route('/messages/<spot_id>', methods=['GET'])                      #←ここ確認
+# def spot_room_view(spot_id):
+#     spot_id = session.get(spot_id)
+#     if spot_id is None:
+#         return redirect(url_for('login_view'))
+    
+#     messages = Message.get_all(spot_id)
+
+#     return render_template('/auth/<spot_id>.html')                        #←ここ確認
+
+
+# # メッセージの投稿
+# @app.route('/messages/<spot_id>', methods=['POST'])
+# def create_message(spot_id):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+    
+#     message = request.form.get('message')
+
+#     if message:
+#         Message.create(uid, spot_id, message, created_at)
+
+#     return redirect(url_for('spot_room_view(spot_id)'))
+
+
+# アカウント情報表示画面
+@app.route('/information', methods=['GET'])
+def information_view():
+    return render_template('/auth/information.html')
+
+# # パスワード変更                                                            #←ここ確認
+# @app.route('/information', methods=['POST'])
+# def change_pass():
+#     password = request.form.get('password')
+#     passwordConfirmation = request.form.get('password_Confirmation')
+
+#     if password != passwordConfirmation:
+#         flash('パスワードが一致しません')
+#     else:
+#         password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+#         return redirect(url_for('information_view'))
+
+
+# # メールアドレス変更                                                        #←ここ確認　新しい変数定義必要？
+# @app.route('/information', methods=['POST'])
+# def change_email():
+
+
+
+# # アカウント名変更                                                          #←ここ確認　新しい変数定義必要？
+# @app.route('/information', methods=['POST'])
+# def change_name():
+
+
+
+
+
+#本体の起動
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
+
+
+
+
+
+
+
+
+
+
+############ 以下は元ファイルでコピーして使う ########################
+# from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
+# from datetime import timedelta
+# import hashlib
+# import uuid
+# import re
+# import os
+
+# from models import User, Channel, Message
+# from util.assets import bundle_css_files
+
+
+# # 定数定義
+# EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+# SESSION_DAYS = 30
+
+# app = Flask(__name__)
+# app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
+# app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
+
+# # ブラウザに静的ファイル（CSSや画像など）を長くキャッシュさせる設定。
+# # 開発中は変更がすぐ反映されないことがあるため、コメントアウトするのが無難です。
+# app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
+
+# # 複数のCSSファイルを1つにまとめて圧縮（バンドル）する処理を実行。
+# bundle_css_files(app)
+
+
+# # ルートページのリダイレクト処理
+# @app.route('/', methods=['GET'])
+# def index():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+#     return redirect(url_for('channels_view'))
 
 
 # # サインアップページの表示
@@ -177,10 +294,10 @@ def index():
 #     return redirect(url_for('signup_process'))
 
 
-# ログインページの表示
-@app.route('/login', methods=['GET'])
-def login_view():
-    return render_template('auth/login.html')
+# # ログインページの表示
+# @app.route('/login', methods=['GET'])
+# def login_view():
+#     return render_template('auth/login.html')
 
 
 # # ログイン処理
@@ -212,16 +329,16 @@ def login_view():
 #     return redirect(url_for('login_view'))
 
 
-# チャンネル一覧ページの表示
-@app.route('/channels', methods=['GET'])
-def channels_view():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-    else:
-        channels = Channel.get_all()
-        channels.reverse()
-        return render_template('channels.html', channels=channels, uid=uid)
+# # チャンネル一覧ページの表示
+# @app.route('/channels', methods=['GET'])
+# def channels_view():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
+#     else:
+#         channels = Channel.get_all()
+#         channels.reverse()
+#         return render_template('channels.html', channels=channels, uid=uid)
 
 
 # # チャンネルの作成
@@ -322,5 +439,5 @@ def channels_view():
 #     return render_template('error/500.html'),500
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", debug=True)
