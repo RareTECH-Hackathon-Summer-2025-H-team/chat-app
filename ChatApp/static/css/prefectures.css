@@ -1,0 +1,26 @@
+.prefectures_title{
+    background-color: aquamarine;
+    border-radius: 8px;
+}
+
+
+
+.spots {
+    background-color: azure;
+}
+
+.prefectures_box {
+    border-bottom: dotted 2px rgb(139, 171, 221);
+}
+
+
+
+.spot_button {
+    display: inline-block;
+    margin: 10px;
+    background-color: aqua;
+    border: solid black;
+    text-decoration: none;
+    color: black;
+    border-radius: 8%;
+}
