@@ -66,7 +66,7 @@ def register_process():
             UserId = str(uid)
             session['uid'] = UserId
             return redirect(url_for('channels_view'))
-    return redirect(url_for('signup_process'))
+    return redirect(url_for('register_process'))
 
 
 # ログインページの表示
@@ -93,7 +93,7 @@ def login_process():
                 flash('パスワードが間違っています！')
             else:
                 session['uid'] = user["uid"]
-                return redirect(url_for('channels_view'))
+                return redirect(url_for('categories_view'))
     return redirect(url_for('login_view'))
 
 
@@ -119,12 +119,12 @@ def categories_view():
     
 #     category = Category.find_by_category_id(category_id)                #←ここ確認
 
-#     return render_template('/auth/categories.html', category=category)   #←ここ確認
+#     return render_template('prefectures.html', category=category)   #←ここ確認
 
 
 # # 特定の都道府県内のスポットルーム一覧表示
-# @app.route('/spots/<category_id>/<prefecture_id>', methods=['GET'])     #←ここ確認
-# def spots_view(category_id, prefecture_id):
+# @app.route('/prefectures/<prefecture_id>', methods=['GET'])     #←ここ確認
+# def spots_view(prefecture_id):
 #     category_id = session.get(category_id)
 #     prefecture_id = session.get(prefecture_id)
 #     if category_id is None or prefecture_id is None:
@@ -144,7 +144,7 @@ def categories_view():
 #     spot_name = request.fort.get('spotTitle')                           #←ここ確認
 #     spot = Spot.find_by_name(spot_name)
 #     if spot == None:
-#         Spot.create(category_id, prefectue_id, spot_name)               #←ここ確認
+#         Spot.create(category_id, prefecture_id, spot_name)               #←ここ確認
 #         return redirect(url_for('spots_view'))
 #     else:
 #         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
