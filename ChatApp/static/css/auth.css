@@ -7,9 +7,14 @@
 }
 
 .auth-header {
+  position: sticky;
+  top: 0;
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: white;
+  
 }
 .header_text {
   margin-left: 20%;
@@ -61,9 +66,39 @@
   background-color: rgb(184, 229, 237);
 }
 
+.signup_button {
+  display: block;
+  margin: 10px auto;
+  width: 60%;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  text-decoration: none;
+  background-color: rgb(108, 233, 239);
+  color: black;
+  border: solid 2px black;
+}
+.signup_button:hover {
+  background-color: rgb(184, 229, 237);
+}
+
+
+
 .guidance {
   font-size: 16px;
   color: rgb(121, 117, 117);
   margin: 0%;
+}
+
+.logo {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.home {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
 }
 

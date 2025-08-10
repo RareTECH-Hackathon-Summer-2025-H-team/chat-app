@@ -111,15 +111,16 @@ def categories_view():
 
 
 # # カテゴリ内の都道府県一覧表示
-# @app.route('/categories/<category_id>', methods=['GET'])
-# def prefectures_view(category_id):
-#     category_id = session.get(category_id)
-#     if category_id is None:
-#         return redirect(url_for('login_view'))
+@app.route('/categories/<category_id>', methods=['GET'])
+def prefectures_view(category_id):
+    category_id = session.get(category_id)
+    if category_id is None:
+        return redirect(url_for('login_view'))
     
-#     category = Category.find_by_category_id(category_id)                #←ここ確認
+    category = category.find_by_category_id(category_id)                #←ここ確認
 
-#     return render_template('prefectures.html', category=category)   #←ここ確認
+
+    return render_template('/auth/prefectures.html', category=category)   #←ここ確認
 
 
 # # 特定の都道府県内のスポットルーム一覧表示
