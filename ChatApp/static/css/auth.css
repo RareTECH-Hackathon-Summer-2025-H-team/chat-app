@@ -6,13 +6,19 @@
   font-size: 20px;
 }
 
-.register-header {
+.auth-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.back {
+.header_text {
   margin-left: 20%;
+  color: black;
+  font-weight: bold;
+  text-decoration: none
+}
+.header_text:hover {
+  color: #4192c5;
 }
 
 

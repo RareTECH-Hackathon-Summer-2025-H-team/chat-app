@@ -1,40 +1,39 @@
-
+{% extends 'auth/base.html' %} {% block title %}
 <title>categories</title>
+{% endblock %}{% block body %}
 <div class="wrapper">
     <form method="post">
-        <header>
-            <a href="information_view">アカウント</a>
-            <a href="login_view">ログアウト</a>
+        <header class="auth-header">
+            <a class="categories_text" href="information_view">アカウント</a>
+            <a class="categories_text" href="{{ url_for('login_view') }}">ログアウト</a>
         </header>
-        <h1 class="auth-title">Wellcom!!<br>
-        Fising Chat</h1>
-    <div>
-        <img src="img/main.jpg" alt="logo" />
-    </div>
-    <h2>どこで釣りする？</h2>
-    <div>
-        <input 
-        type="image"
-        src="sea.jpg"
-        name="sea.button"
-        alt="海ルーム"
-        value="海"
-        />
-        <input
-        type="image"
-        src="river.jpg"
-        name="river.button"
-        alt="川ルーム"
-        value="川"
-        />
-        <input
-        type="image"
-        src="lake.jpg"
-        name="lake.button"
-        alt="湖ルーム"
-        value="湖"
-        />   
-    </div>
+        <h1 class="categories_title">Wellcom!!<br>
+        Fishing Chat</h1>
+        <div class="categories_main">
+            <img class="logo_main" src="../../static/img/main.jpg" alt="logo" />
+        </div>
+        <h2 class="subtitle">どこで釣りする？</h2>
+        <main>
+            <nav>
+                <ul class="categories_list">
+                    <li class="categories_button">
+                        <a class="categories_link" href="prefecture_view">
+                            <img src="../../static/img/sea.png" alt="海ボタン" class="categories_img" />
+                        </a>
+                    </li>
+                    <li class="categories_button">
+                        <a class="categories_link" href="prefecture_view">
+                            <img src="../../static/img/river.png" alt="川ボタン" class="categories_img" />
+                        </a>
+                    </li>
+                    <li class="categories_button">
+                        <a class="categories_link" href="prefecture_view">
+                            <img src="../../static/img/lake.png" alt="湖ボタン" class="categories_img" />
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </main>    
     </form>
 </div>
 {% endblock %}
