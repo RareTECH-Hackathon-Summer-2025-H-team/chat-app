@@ -1,0 +1,59 @@
+* {
+    color:black;
+    text-decoration: none;
+}
+/* リンク */
+a {
+    font-weight: bold;
+}
+a:hover {
+    color: #4192c5;
+}
+
+/* 県名見出し */
+h1 {
+    font-size: 24px;
+}
+
+/* 釣りスポット追加ボタン */
+.add_spot {
+    text-align: right;
+}
+
+/* 釣りスポットのリスト */
+/* 親コンテナ */
+.spot_section {
+    display: flex;
+    justify-content: center;
+}
+/* 中身リスト */
+.spot_list {
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/* リスト頭をアイコン画像に変える */
+.spot_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-size: 24px 24px;
+    padding-left: 24px;
+}
+.spot_list li {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 8px;
+}
+.spot_list li::before {
+    content:"";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: url("../img/icon_fish.png") no-repeat center center;
+    background-size: contain;
+}
