@@ -47,7 +47,7 @@ def register_process():
     email = request.form.get('email')
     password = request.form.get('password')
     passwordConfirmation = request.form.get('password-confirmation')
-
+    
     if name == '' or email =='' or password == '' or passwordConfirmation == '':
         flash('空のフォームがあるようです')
     elif password != passwordConfirmation:

@@ -18,6 +18,7 @@ class User:
        conn = db_pool.get_conn()
        try:
             # コネクションからカーソル（操作用のオブジェクト）を取得する
+           
            with conn.cursor() as cur:
                sql = "INSERT INTO users (id, name, email, password) VALUES (%s, %s, %s, %s);"
                # SQLを実行し、パラメータ（id, name, email, password）を埋め込む
@@ -25,6 +26,7 @@ class User:
                # データベースに変更を反映（保存）する
                conn.commit()
        except pymysql.Error as e:
+           print("models.pyl29")
            print(f'エラーが発生しています：{e}')
            abort(500)
        finally:

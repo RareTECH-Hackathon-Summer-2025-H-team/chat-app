@@ -9,14 +9,14 @@
     </header>
 
         <!-- ここからアカウント登録フォーム -->
-    <form method="post">
+    <form method="post" action="{{ url_for('register_process') }}">
         <h1>アカウント登録</h1>
         <div>
             <label for="register-name-input" class="auth-name">アカウント名</label><br>
             <input class="auth-text"
                 type="text"
                 placeholder="アカウント名を入力してください"
-                name="user_name"
+                name="name"
                 id="register-name-input"
             />
         </div>
@@ -56,7 +56,7 @@
                     {% endfor %}
             </ul>
             {% endif %} {% endwith %}
-                <button class="auth-button">アカウント登録</button>
+                <input type="submit" value="アカウント登録" class="auth-button">
         </div>
     </form>
 </div>
