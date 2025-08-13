@@ -1,20 +1,51 @@
-{% extends 'auth/base.html' %}
-{% block titile %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../../static/css/auth.css" />
+    </head>
+    <body>
+<!--{% extends 'auth/base.html' %}
+{% block titile %}-->
 <title>information</title>
-{% endblock %}
-{% block body %}
+<!--{% endblock %}
+{% block body %}-->
 <div class="wrapper">
     <form method="post">
-        <div>
-            <a href="{{ url_for('categorise_view')}}">＜戻る</a>
+        <header>
+            <a href="categorise_view">＜戻る</a>
             <h2>アカウント</h2>
-        </div>
+        </header>
         <div>
             <p>基本情報</p>
         </div>
         <div>
-            <h4>アカウント名</h4>
-            
+            <label for="new_name_input" class="information_name">アカウント名</label>
+            <p>現在</p>
+            <input
+            type="text"
+            placeholder="アカウント名"     
+            name="name" 
+            value="新規"
+            id="new_name_input">
+        </div>
+        <div>
+            <label for="new_email_input" class="information_email">メールアドレス</label>
+            <p>現在</p>
+            <input
+            type="text"
+            placeholder="メールアドレス"
+            name="email"
+            value="新規"
+            id="new_email_input">
+        </div>
+        <div>
+            {% width message}
         </div>
     </form>
 </div>
+    </body>
+<!--{% endblock %}-->
+</html>
