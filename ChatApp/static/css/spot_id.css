@@ -51,7 +51,7 @@ h1 {
     position: absolute;
     left: 0;
     top: 50%;
-    transform: translateY(-50%);
+    /* transform: translateY(-50%); */
     width: 24px;
     height: 24px;
     background: url("../img/icon_fish.png") no-repeat center center;
