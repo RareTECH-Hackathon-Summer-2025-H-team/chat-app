@@ -1,0 +1,21 @@
+* {
+    color:black;
+    text-decoration: none;
+}
+/* リンク */
+a {
+    font-weight: bold;
+}
+a:hover {
+    color: #4192c5;
+}
+
+/* 見出し */
+h1 {
+    font-size: 24px;
+}
+
+/* ウィンドウを閉じるボタン */
+.close_window {
+    text-align: right;
+}
