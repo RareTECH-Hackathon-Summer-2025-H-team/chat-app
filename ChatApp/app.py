@@ -65,9 +65,8 @@ def register_process():
             User.create(uid, name, email, password)
             UserId = str(uid)
             session['uid'] = UserId
-            # ここでカテゴリ画面にリダイレクトする
             return redirect(url_for('categories_view'))
-    return redirect(url_for('register_process'))
+    return redirect(url_for('register_view'))
 
 
 # ログインページの表示

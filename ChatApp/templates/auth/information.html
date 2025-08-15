@@ -26,9 +26,9 @@
             <p>現在</p>
             <input
             type="text"
+            value="新規"
             placeholder="アカウント名"     
             name="name" 
-            value="新規"
             id="new_name_input">
         </div>
         <div>
@@ -42,8 +42,30 @@
             id="new_email_input">
         </div>
         <div>
-            {% width message}
+            {% with message = get_flashed_messages() %}
+            {% if message %}
+            <ul>
+                {% for message in messages %}
+                <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
         </div>
+        <div>
+            <P>パスワードをお忘れの方</P>
+            <label for="new_password_input" class="information_password">パスワード</label>
+            <input
+            type="password"
+            placeholder="新規パスワード"
+            name="password"
+            id="new_password_input">
+            
+            <input
+        </div>
+
+        
+
     </form>
 </div>
     </body>
