@@ -21,10 +21,6 @@ class User:
            with conn.cursor() as cur:
                sql = "INSERT INTO users (id, name, email, password) VALUES (%s, %s, %s, %s);"
                # SQLを実行し、パラメータ（id, name, email, password）を埋め込む
-               print(id)
-               print(name)
-               print(email)
-               print(password)
                cur.execute(sql, (id, name, email, password))
                # データベースに変更を反映（保存）する
                conn.commit()
