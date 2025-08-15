@@ -65,8 +65,8 @@ def register_process():
             User.create(uid, name, email, password)
             UserId = str(uid)
             session['uid'] = UserId
-            return redirect(url_for('channels_view'))
-    return redirect(url_for('register_process'))
+            return redirect(url_for('categories_view'))
+    return redirect(url_for('register_view'))
 
 
 # ログインページの表示
@@ -92,7 +92,7 @@ def login_process():
             if hashPassword != user["password"]:
                 flash('パスワードが間違っています！')
             else:
-                session['uid'] = user["uid"]
+                session['uid'] = user["id"]
                 return redirect(url_for('categories_view'))
     return redirect(url_for('login_view'))
 
