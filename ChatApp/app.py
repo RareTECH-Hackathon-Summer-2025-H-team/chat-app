@@ -5,7 +5,7 @@ import uuid
 import re
 import os
 
-from models import User, Channel, Message
+from models import User#, Channel, Message
 from util.assets import bundle_css_files
 
 
@@ -47,7 +47,7 @@ def register_process():
     email = request.form.get('email')
     password = request.form.get('password')
     passwordConfirmation = request.form.get('password-confirmation')
-    
+
     if name == '' or email =='' or password == '' or passwordConfirmation == '':
         flash('空のフォームがあるようです')
     elif password != passwordConfirmation:
@@ -65,9 +65,8 @@ def register_process():
             User.create(uid, name, email, password)
             UserId = str(uid)
             session['uid'] = UserId
-            # ここでカテゴリ画面にリダイレクトする
             return redirect(url_for('categories_view'))
-    return redirect(url_for('register_process'))
+    return redirect(url_for('register_view'))
 
 
 # ログインページの表示
@@ -112,13 +111,13 @@ def categories_view():
 
 
 # # カテゴリ内の都道府県一覧表示
-@app.route('/categories/<category_id>', methods=['GET'])
-def prefectures_view(category_id):
-    category_id = session.get(category_id)
-    if category_id is None:
+@app.route('/categories/<cid>', methods=['GET'])
+def prefectures_view(cid):
+    category_id = session.get(cid)
+    if cid is None:
         return redirect(url_for('login_view'))
     
-    category = category.find_by_category_id(category_id)                #←ここ確認
+    category = category.find_by_category_id(cid)                #←ここ確認
 
 
     return render_template('/auth/prefectures.html', category=category)   #←ここ確認

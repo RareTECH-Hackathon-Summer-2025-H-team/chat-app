@@ -3,7 +3,7 @@ DROP USER 'testuser';
 
 CREATE USER 'testuser' IDENTIFIED BY 'testuser';
 CREATE DATABASE chatapp;
-USE chatapp
+USE chatapp;
 GRANT ALL PRIVILEGES ON chatapp.* TO 'testuser';
 
 CREATE TABLE users (
