@@ -2,7 +2,7 @@
 <title>categories</title>
 {% endblock %}{% block body %}
 <div class="wrapper">
-    <form method="post">
+    <form method="get" action="{{ url_for }}">
         <header class="auth-header">
             <img class="logo"src="../../static/img/logo.png" alt="ロゴ" />
             <a class="categories_text" href="information_view">アカウント</a>
@@ -18,11 +18,11 @@
             <nav>
                 <ul class="categories_list">
                     <li class="categories_button">
-                        <a class="categories_link" href="prefecture_view">
+                        <a class="categories_link" href="{{ url_for('prefectures_view') }}">
                             <img src="../../static/img/sea.png" alt="海ボタン" class="categories_img" />
                         </a>
                     </li>
-                    <li class="categories_button">
+                <li class="categories_button">
                         <a class="categories_link" href="prefecture_view">
                             <img src="../../static/img/river.png" alt="川ボタン" class="categories_img" />
                         </a>

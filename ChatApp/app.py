@@ -31,7 +31,7 @@ def index():
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
-    return redirect(url_for('channels_view'))
+    return redirect(url_for('categories_view'))
 
 
  # 会員登録ページの表示

@@ -30,7 +30,9 @@ CREATE TABLE spots (
     cid INT NOT NULL,
     pid INT NOT NULL,
     FOREIGN KEY (cid) REFERENCES categories(id) ON DELETE CASCADE,
-    FOREIGN KEY (pid) REFERENCES prefectures(id) ON DELETE CASCADE
+    FOREIGN KEY (pid) REFERENCES prefectures(id) ON DELETE CASCADE,
+    spot_name VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE messages (
@@ -44,9 +46,7 @@ CREATE TABLE messages (
 );
 
 INSERT INTO users(id, name, email, password) VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テスト','test@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578');
-INSERT INTO messages(id, uid, cid, message) VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', '1', '誰かかまってください');
 INSERT INTO categories(category_name) VALUES('海'),('川'),('湖');
-INSERT INTO spots(cid, pid, spot_name) VALUES(1, 1, "知床"), (1, 1, "熊石海岸");
 INSERT INTO prefectures(prefecture_name) VALUES
   ('北海道'),
   ('青森県'),
@@ -94,7 +94,9 @@ INSERT INTO prefectures(prefecture_name) VALUES
   ('大分県'),
   ('宮崎県'),
   ('鹿児島県'),
-  ('沖縄県')
+  ('沖縄県');
+INSERT INTO spots(id, cid, pid, spot_name) VALUES(1, 1, 1, "知床"), (2, 1, 1, "熊石海岸");
+INSERT INTO messages(id, uid, sid, message) VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', 1, '誰かかまってください');
 
 
 -- 以下は元ファイルの内容. コピーして使用する --
