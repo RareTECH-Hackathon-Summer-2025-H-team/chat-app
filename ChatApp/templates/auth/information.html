@@ -5,69 +5,77 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../../static/css/auth.css" />
+        <link rel="stylesheet" href="../../static/css/information.css" />
     </head>
     <body>
 <!--{% extends 'auth/base.html' %}
 {% block titile %}-->
-<title>information</title>
+        <title>information</title>
+
 <!--{% endblock %}
 {% block body %}-->
-<div class="wrapper">
-    <form method="post">
-        <header>
-            <a href="categorise_view">＜戻る</a>
-            <h2>アカウント</h2>
-        </header>
-        <div>
-            <p>基本情報</p>
+        <div class="wrapper">
+            <form method="post">
+                <header class="auth-header">
+                    <a class="information_back"  href="categorise_view">＜戻る</a>
+                    <h3>アカウント</h3>
+                    <img class="logo" src="../../static/img/logo.png"/>
+                </header>
+                <div>
+                    <p>基本情報・パスワード/確認・変更フォーム</p>
+                </div>
+                <div class="information">
+                    <div>
+                        <h4 class="information_name">アカウント名</h4>
+                        <p>現在</p>
+                        <label for="new_name_input" class="information_text">新規
+                        <input class="information_form"
+                        type="text"
+                        placeholder="アカウント名を入力してください"     
+                        name="name"
+                        id="new_name_input"></label>
+                    </div>
+                    <div>
+                        <h4 class="information_name">メールアドレス</h4>
+                        <P>現在</P>
+                        <label for="new_email_input" class="information_text">新規
+                        <input class="information_form"
+                        type="text"
+                        placeholder="メールアドレスを入力してください"
+                        name="email"
+                        id="new_email_input"></label>
+                    </div>
+                    <div>
+                        <input class="information_form"
+                        type="password"
+                        placeholder="パスワードを入力してください"
+                        name="password">
+                    </div>
+                    <input type="submit" value="変更" class="information_button">
+                </div> 
+                <div class="information">   
+                    <div>
+                        <h4 class="information_name">パスワード変更</h4>
+                        <p>現在</p>
+                        <label for="new_password_input" class="information_text">新規
+                        <input class="information_form"
+                        type="password"
+                        placeholder="パスワードを入力してください"
+                        name="password"
+                        id="new_password_input"></label>
+                    </div>
+                    <div>
+                        <label for="new_password_confirmation_input" class="information_text2">確認用
+                        <input class="information_form" 
+                        type="password"
+                        placeholder="パスワードを入力してください"
+                        name="confirmation_password"
+                        id="new_password_confirmation_input"></label>
+                    </div>
+                    <input type="submit" value="変更" class="information_button">
+                </div>    
+            </form>
         </div>
-        <div>
-            <label for="new_name_input" class="information_name">アカウント名</label>
-            <p>現在</p>
-            <input
-            type="text"
-            value="新規"
-            placeholder="アカウント名"     
-            name="name" 
-            id="new_name_input">
-        </div>
-        <div>
-            <label for="new_email_input" class="information_email">メールアドレス</label>
-            <p>現在</p>
-            <input
-            type="text"
-            placeholder="メールアドレス"
-            name="email"
-            value="新規"
-            id="new_email_input">
-        </div>
-        <div>
-            {% with message = get_flashed_messages() %}
-            {% if message %}
-            <ul>
-                {% for message in messages %}
-                <li>{{message}}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
-        </div>
-        <div>
-            <P>パスワードをお忘れの方</P>
-            <label for="new_password_input" class="information_password">パスワード</label>
-            <input
-            type="password"
-            placeholder="新規パスワード"
-            name="password"
-            id="new_password_input">
-            
-            <input
-        </div>
-
-        
-
-    </form>
-</div>
     </body>
 <!--{% endblock %}-->
 </html>

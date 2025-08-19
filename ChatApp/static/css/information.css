@@ -1,0 +1,46 @@
+.information_back {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;   
+}
+.information_back:hover {
+    color: #4192c5;
+}
+
+.information {
+    border: 5px solid rgb(24, 149, 195);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    background-color: azure;
+}
+
+.information_name {
+    margin: 10px;
+}
+
+.information_text {
+    display: block;
+    margin-right: 45px;
+}
+.information_text2 {
+    display: block;
+    margin-right: 65px;
+}
+
+.information_form {
+    display: inline-block;
+    margin: 10px;
+    width: 380px;
+    height: 40px;
+
+}
+
+.information_button {
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    margin: 10px;
+    background-color: aqua;
+    border: 1px solid grey;
+    border-radius: 8px;
+}
