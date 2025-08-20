@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width"=device-width, initial-scale="1.0" />
+        <link rel="stylesheet" href="../../static/css/auth.css" />
+        <link rel="stylesheet" href="../../static/css/message.css" />
+    </head>    
+    <body>
+        <title>message</title>
+        <div class="message_room">
+            <form method="post">
+                <header class="auth-header">
+                    <a  class="back" href="spots_view">＜北海道</a>
+                    <h3 class="spot">知床</h3>
+                    <a href="categories.view">
+                        <img class="message_home" src="../../static/img/home.png" alt="ホーム" />
+                    </a>
+                    <img class="logo" src="../../static/img/logo.png"/>
+                </header>
+                <div class="room">
+                    <ul>
+                        <li class="chat you">
+                            <!-- 相手のメッセージにはclass「you」をつける -->
+                            <p class="message">相手のメッセージ</p>
+                            <div class="time_stamp">17:00</div>
+                        </li>
+                        <li class="chat me">
+                            <!-- 自分のメッセージにはclass「me」をつける -->
+                            <p class="message">自分のメッセージ自分のメッセージ自分のメッセージ自分のメッセージ自分のメッセージ</p>
+                            <div class="time_stamp">既読<br>
+                            17:05</div> 
+                        </li>
+                        <li class="chat you">
+                            <P class="message">相手のメッセージ相手のメッセージ相手のメッセージ相手のメッセージ相手のメッセージ</P>
+                            <div class="time_stamp">17:10</div>
+                        </li>
+                        <li class="chat me">
+                            <p class="message">自分のメッセージ自分のメッセージ自分のメッセージ自分のメッセージ自分のメッセージ</p>
+                            <div class="time_stamp">既読<br>
+                            17:15</div>
+                        </li>
+                        <li class="chat me">
+                            <p class="message">自分のメッセージ自分のメッセージ</p>
+                            <div class="time_stamp">既読<br>
+                            17:16</div>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

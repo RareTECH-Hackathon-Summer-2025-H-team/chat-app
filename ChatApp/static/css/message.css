@@ -1,0 +1,76 @@
+.back {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+.back:hover {
+    color: #4192c5;
+}
+
+.message_home {
+    position: relative;
+    left: 130px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+.spot {
+    position: relative;
+    left: 80px;
+}
+
+
+
+ul, li, p {
+    margin: 0;
+    padding: 0;
+}
+
+ul, li {
+    list-style: none;
+}
+
+.message_room {
+    width: 700px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.room {
+    background-color: azure;
+}
+
+.chat {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.chat .message {
+    max-width: 60%;
+    border-radius: 16px;
+    padding: 8px;
+}
+
+.chat .time_stamp {
+    color: #aaa;
+    font-size: 11px;
+    align-self: flex-end;
+    margin: 0.5px;
+}
+
+/* 相手メッセージのCSS */
+.chat.you .message {
+    color: white;
+    background-color: rgb(14, 14, 142);
+}
+/* 自分のメッセージのCSS */
+.chat.me {
+    flex-direction: row-reverse;
+}
+.chat.me .message {
+    color: black;
+    background-color: rgb(11, 210, 228);
+}
+
+.chat .status {
+    text-align: right;
+}
