@@ -47,14 +47,14 @@ class User:
 # スポットクラス
 class Spot:
     @classmethod
-    def create(cls, uid, new_spot_name, new_spot_description):
+    def create(cls, cid, pid, new_spot_name):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO spots (uid, name, cid, pid, spot_name, time_stamp, created_at) VALUES (%s, %s, %s);"
-                cur.execute(sql, (uid, new_channel_name, new_channel_description,))
+                sql = "INSERT INTO spots (cid, pid, spot_name) VALUES (%s, %s, %s);"
+                cur.execute(sql, (cid, pid, new_spot_name,))
                 conn.commit()
-        except pympsql.Error as e:
+        except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
             about(500)
         finally:
@@ -109,12 +109,12 @@ class Spot:
 
 
     @classmethod
-    def update(cls, uid, new_spot_name, new_spot_description, sid):
+    def update(cls, cid, pid, new_spot_name, sid):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s"
-                cur.execute(sql, (uid, new_spot_name, new_spot_description, sid))
+                sql = "UPDATE spots SET cid=%s, pid=%s, name=%s, WHERE id=%s"
+                cur.execute(sql, (cid, pid, new_spot_name, sid))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています:{e}')
@@ -137,102 +137,7 @@ class Spot:
             db_pool.release(conn)
 
 
-# # チャンネルクラス
-# class Channel:
-#    @classmethod
-#    def create(cls, uid, new_channel_name, new_channel_description):
-#        conn = db_pool.get_conn()
-#        try:
-#            with conn.cursor() as cur:
-#                sql = "INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);"
-#                cur.execute(sql, (uid, new_channel_name, new_channel_description,))
-#                conn.commit()
-#        except pymysql.Error as e:
-#            print(f'エラーが発生しています：{e}')
-#            abort(500)
-#        finally:
-#            db_pool.release(conn)
 
-
-#    @classmethod
-#    def get_all(cls):
-#        conn = db_pool.get_conn()
-#        try:
-#            with conn.cursor() as cur:
-#                sql = "SELECT * FROM channels;"
-#                cur.execute(sql)
-#                channels = cur.fetchall()
-#                return channels
-#        except pymysql.Error as e:
-#            print(f'エラーが発生しています：{e}')
-#            abort(500)
-#        finally:
-#            db_pool.release(conn)
-
-
-#    @classmethod
-#    def find_by_cid(cls, cid):
-#        conn = db_pool.get_conn()
-#        try:
-#            with conn.cursor() as cur:
-#                sql = "SELECT * FROM channels WHERE id=%s;"
-#                cur.execute(sql, (cid,))
-#                channel = cur.fetchone()
-#                return channel
-#        except pymysql.Error as e:
-#            print(f'エラーが発生しています：{e}')
-#            abort(500)
-#        finally:
-#            db_pool.release(conn)
-
-
-#    @classmethod
-#    def find_by_name(cls, channel_name):
-#        conn = db_pool.get_conn()
-#        try:
-#            with conn.cursor() as cur:
-#                sql = "SELECT * FROM channels WHERE name=%s;"
-#                cur.execute(sql, (channel_name,))
-#                channel = cur.fetchone()
-#                return channel
-#        except pymysql.Error as e:
-#            print(f'エラーが発生しています：{e}')
-#            abort(500)
-#        finally:
-#            db_pool.release(conn)
-
-
-#    @classmethod
-#    def update(cls, uid, new_channel_name, new_channel_description, cid):
-#        conn = db_pool.get_conn()
-#        try:
-#            with conn.cursor() as cur:
-#                sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
-#                cur.execute(sql, (uid, new_channel_name, new_channel_description, cid,))
-#                conn.commit()
-#        except pymysql.Error as e:
-#            print(f'エラーが発生しています：{e}')
-#            abort(500)
-#        finally:
-#            db_pool.release(conn)
-
-
-#    @classmethod
-#    def delete(cls, cid):
-#        conn = db_pool.get_conn()
-#        try:
-#            with conn.cursor() as cur:
-#                sql = "DELETE FROM channels WHERE id=%s;"
-#                cur.execute(sql, (cid,))
-#                conn.commit()
-#        except pymysql.Error as e:
-#            print(f'エラーが発生しています：{e}')
-#            abort(500)
-#        finally:
-#            db_pool.release(conn)
-
-
-# メッセージクラス
 class Message:
    @classmethod
    def create(cls, uid, sid, message):
@@ -255,7 +160,7 @@ class Message:
        try:
            with conn.cursor() as cur:
                sql = """
-                   SELECT id, u.uid, user_name, message 
+                   SELECT id, u.uid, name, message 
                    FROM messages AS m 
                    INNER JOIN users AS u ON m.uid = u.uid 
                    WHERE sid = %s 
