@@ -67,7 +67,7 @@ class Spot:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM spots;"
                 cur.execute(sql)
-                spots = cur.fetcall()
+                spots = cur.fetchall()
                 return spots
         except pymysql.KeyError as e:
             print(f'エラーが発生しています : {e}')
