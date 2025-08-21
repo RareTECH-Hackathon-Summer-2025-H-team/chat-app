@@ -5,8 +5,8 @@ import uuid
 import re
 import os
 
-# from models import User,Spot,Message
-# from util.assets import bundle_css_files
+from models import User#, Channel, Message
+from util.assets import bundle_css_files
 
 
 # 定数定義　　　正規表現の確認をする
@@ -31,7 +31,7 @@ def index():
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
-    return redirect(url_for('channels_view'))
+    return redirect(url_for('categories_view'))
 
 
  # 会員登録ページの表示
@@ -47,7 +47,7 @@ def register_process():
     email = request.form.get('email')
     password = request.form.get('password')
     passwordConfirmation = request.form.get('password-confirmation')
-    
+
     if name == '' or email =='' or password == '' or passwordConfirmation == '':
         flash('空のフォームがあるようです')
     elif password != passwordConfirmation:
@@ -111,10 +111,10 @@ def categories_view():
 
 
 # # カテゴリ内の都道府県一覧表示
-@app.route('/categories/<category_id>', methods=['GET'])
-def prefectures_view(category_id):
+@app.route('/categories/<cid>', methods=['GET'])
+def prefectures_view(cid):
     category_id = session.get(cid)
-    if category_id is None:
+    if cid is None:
         return redirect(url_for('login_view'))
     
     category = category.find_by_category_id(cid)                #←ここ確認
