@@ -5,8 +5,8 @@ import uuid
 import re
 import os
 
-from models import User, Channel, Message
-from util.assets import bundle_css_files
+# from models import User,Spot,Message
+# from util.assets import bundle_css_files
 
 
 # 定数定義　　　正規表現の確認をする
@@ -22,7 +22,7 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 # app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 
 # 複数のCSSファイルを1つにまとめて圧縮（バンドル）する処理を実行。
-bundle_css_files(app)
+# bundle_css_files(app)
 
 
 # ルートページのリダイレクト処理
@@ -104,7 +104,7 @@ def logout():
     return redirect(url_for('login_view'))
 
 
-# カテゴリ画面表示
+# カテゴリ画面表示（ここまでは遷移できている）
 @app.route('/categories', methods=['GET'])
 def categories_view():
     return render_template('auth/categories.html')
@@ -113,11 +113,11 @@ def categories_view():
 # # カテゴリ内の都道府県一覧表示
 @app.route('/categories/<category_id>', methods=['GET'])
 def prefectures_view(category_id):
-    category_id = session.get(category_id)
+    category_id = session.get(cid)
     if category_id is None:
         return redirect(url_for('login_view'))
     
-    category = category.find_by_category_id(category_id)                #←ここ確認
+    category = category.find_by_category_id(cid)                #←ここ確認
 
 
     return render_template('/auth/prefectures.html', category=category)   #←ここ確認
@@ -151,7 +151,14 @@ def prefectures_view(category_id):
 #         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
 
 
-# # スポットルームの表示
+# スポットルームの表示/roku
+@app.route('/spot_id', methods=['GET'])
+def spot_room_view():
+    spot_id=session.get('sid')
+    if spot_id is None:
+        return redirect(url_for('prefectures_view'))
+    return render_template('spot_id.html')
+
 # @app.route('/messages/<spot_id>', methods=['GET'])                      #←ここ確認
 # def spot_room_view(spot_id):
 #     spot_id = session.get(spot_id)
