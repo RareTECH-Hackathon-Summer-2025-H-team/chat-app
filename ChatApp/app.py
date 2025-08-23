@@ -5,7 +5,8 @@ import uuid
 import re
 import os
 
-from models import User, Category, Prefecture#, Message
+
+from models import User, Spot, Message
 from util.assets import bundle_css_files
 
 
@@ -115,7 +116,7 @@ def categories_view():
 def prefectures_view(cid):
     category_id = session.get(cid)
     if cid is None:
-        return redirect(url_for('login_view'))
+        return redirect(url_for('spots_view'))
     
     category = category.find_by_category_id(cid)                #←ここ確認
 
@@ -152,16 +153,35 @@ def spots_view(cid,pid):
 #         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
 
 
-# スポットルームの表示/roku
-@app.route('/spot_id', methods=['GET'])
-def spot_room_view():
-    spot_id=session.get('sid')
-    if spot_id is None:
-        return redirect(url_for('prefectures_view'))
-    return render_template('spot_id.html')
+# メッセージルームの表示
+@app.route('/spots/<sid>/messages', methods=['GET'])
+def spot_room_view(sid):
+    uid =session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    spot = Spot.find_by_sid(sid)
+    messages = Message.get_all(sid)
 
-# @app.route('/messages/<spot_id>', methods=['GET'])                      #←ここ確認
-# def spot_room_view(spot_id):
+    return render_template('message.html', messages=messages, spot=spot, uid=uid)
+
+# メッセージの投稿
+@app.route('/spots/<sid>/,messages', methods=['POST'])
+def create_message(sid):
+    uid = session('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    message = request.form.get('messages')
+
+    if message:
+        Message.create(uid, sid, message)
+
+    return redirect('/spots/{sid}/messages' .format(sid = sid))    
+
+
+# @app.route('/messages/<sid>', methods=['GET'])                      #←ここ確認
+# def spot_room_view(sid):
 #     spot_id = session.get(spot_id)
 #     if spot_id is None:
 #         return redirect(url_for('login_view'))

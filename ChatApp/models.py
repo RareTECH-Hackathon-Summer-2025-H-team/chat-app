@@ -56,7 +56,7 @@ class Spot:
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
-            about(500)
+            abort(500)
         finally:
             db_pool.release(conn)
     
