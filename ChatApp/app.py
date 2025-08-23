@@ -5,6 +5,7 @@ import uuid
 import re
 import os
 
+
 from models import User, Spot, Message
 from util.assets import bundle_css_files
 
@@ -123,17 +124,18 @@ def prefectures_view(cid):
     return render_template('/auth/prefectures.html', category=category)   #←ここ確認
 
 
-# # 特定の都道府県内のスポットルーム一覧表示
-# @app.route('/prefectures/<prefecture_id>', methods=['GET'])     #←ここ確認
-# def spots_view(prefecture_id):
-#     category_id = session.get(category_id)
-#     prefecture_id = session.get(prefecture_id)
-#     if category_id is None or prefecture_id is None:
-#         return redirect(url_for('login_view'))
+# 特定の都道府県内のスポットルーム一覧表示 /やんみー
+@app.route('/spots/<cid>/<pid>', methods=['GET'])
+def spots_view(cid,pid):
+    category_id = session.get(cid)
+    prefecture_id = session.get(pid)
+    if category_id is None or prefecture_id is None:
+        return redirect(url_for('login_view'))
     
-#     spot = Spot.find_by_spot_id(spot_id)                                #←ここ確認
+    category = Category.find_by_cid(cid)
+    prefecture = Prefecture.find_by_pid(pid)
 
-#     return render_template('/auth/spots.html', spot=spot)                #←ここ確認
+    return render_template('/auth/spots_id.html', category=category, prefecture=prefecture)                #←ここ確認
 
 
 # #スポットルームの作成
