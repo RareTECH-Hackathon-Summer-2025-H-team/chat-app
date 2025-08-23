@@ -69,7 +69,7 @@ class Spot:
                 cur.execute(sql)
                 spots = cur.fetchall()
                 return spots
-        except pymysql.KeyError as e:
+        except pymysql.Error as e:
             print(f'エラーが発生しています : {e}')
             abort(500)
         finally:
@@ -189,6 +189,106 @@ class Message:
            abort(500)
        finally:
            db_pool.release(conn)
+
+
+#Categoryクラス
+class Category:
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM categories;"
+                cur.execute(sql)
+                categories = cur.fetchall()
+                return categories
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+    @classmethod
+    def find_by_cid(cls, cid):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM categories WHERE id=%s;"
+                cur.execute(sql, (cid,))
+                category = cur.fetchone()
+                return category
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+    @classmethod
+    def find_by_name(cls, category_name):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM categories WHERE name=%s;"
+                cur.execute(sql, (category_name,))
+                category = cur.fetchone()
+                return category
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+#Prefectureクラス
+class Prefecture:
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.crusor() as cur:
+                sql = "SELECT * FROM categories;"
+                cur.execute(sql)
+                prefectures = cur.fetchall()
+                return prefectures
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+    @classmethod
+    def find_by_pid(cls, pid):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM prefectures WHERE id=%s;"
+                cur.execute(sql, (pid,))
+                prefecture = cur.fetchone()
+                return prefecture
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+    @classmethod
+    def find_by_name(cls, prefecture_name):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM prefectures WHERE name=%s;"
+                cur.execute(sql, (prefecture_name,))
+                prefecture = cur.fetchone()
+                return prefecture
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
 
 
 
