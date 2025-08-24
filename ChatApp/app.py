@@ -5,7 +5,7 @@ import uuid
 import re
 import os
 
-from models import User, Category, Prefecture#, Message
+from models import User, Category, Prefecture, Message, Spot
 from util.assets import bundle_css_files
 
 
@@ -110,17 +110,18 @@ def categories_view():
     return render_template('auth/categories.html')
 
 
-# # カテゴリ内の都道府県一覧表示
+# # カテゴリ内の都道府県一覧表示/roku
 @app.route('/categories/<cid>', methods=['GET'])
 def prefectures_view(cid):
-    category_id = session.get(cid)
+    # cid = session.get(cid)セッションは不要？？
     if cid is None:
+        # print(f'cidを表示:{cid}')
         return redirect(url_for('login_view'))
     
-    category = category.find_by_category_id(cid)                #←ここ確認
+    # 引数をid→cidにしたら動いたけどなぜなのか不明。
+    category = Category.find_by_cid(cid)                #←ここ確認
 
-
-    return render_template('/auth/prefectures.html', category=category)   #←ここ確認
+    return render_template('auth/prefectures.html', category=category)   #←ここ確認
 
 
 # 特定の都道府県内のスポットルーム一覧表示 /やんみー

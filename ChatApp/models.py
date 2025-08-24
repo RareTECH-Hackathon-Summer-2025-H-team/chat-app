@@ -56,7 +56,7 @@ class Spot:
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
-            about(500)
+            abort(500)
         finally:
             db_pool.release(conn)
     
@@ -83,6 +83,22 @@ class Spot:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM spots WHERE id=%s;"
                 cur.execute(sql, (sid,))
+                spot = cur.fetchone()
+                return spot
+        except pymysql.Error as e:
+            print(f'エラーが発生しています:{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+# 追加/roku
+    @classmethod
+    def find_by_cid(cls, cid):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM spots WHERE cid=%s;"
+                cur.execute(sql, (cid,))
                 spot = cur.fetchone()
                 return spot
         except pymysql.Error as e:
@@ -210,12 +226,12 @@ class Category:
 
 
     @classmethod
-    def find_by_cid(cls, cid):
+    def find_by_cid(cls, id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM categories WHERE id=%s;"
-                cur.execute(sql, (cid,))
+                cur.execute(sql, (id,))
                 category = cur.fetchone()
                 return category
         except pymysql.Error as e:
