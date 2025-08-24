@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../../static/css/auth.css" />
-    <link rel="stylesheet" href="../../static/css/spot_id.css" />
-    <!-- <link rel="stylesheet" href="../../static/css/auth.css" /> -->
-
-  </head>
-<body>
-<!-- {% extends 'base.html' %}
-{% block title %} -->
+{% extends 'auth/base.html' %} {% block title %}
 <title>釣りスポット選択</title>
-<!-- {% end block %}
-{% block body %} -->
+{% end block %}{% block body %}
 <div class="wrapper">
     <header class="auth-header">
         <!-- <a class="spot_text" href="prefectures_view">＜海</a> -->
@@ -30,7 +16,7 @@
      <div class="spot_section">
         <ul class="spot_list">
           {% for spot in spots %}
-            <li>{{ spot }}</li>
+            <li>{{ spot.spot_name }}</li>
           {% endfor %}
             
         </ul>
@@ -44,4 +30,4 @@
 
 </div>
 </body>
-<!-- {% end block %} -->
+{% end block %}
