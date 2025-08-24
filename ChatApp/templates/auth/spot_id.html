@@ -17,7 +17,8 @@
 {% block body %} -->
 <div class="wrapper">
     <header class="auth-header">
-        <a class="spot_text" href="prefectures_view">＜海</a>
+        <!-- <a class="spot_text" href="prefectures_view">＜海</a> -->
+        <a class="spot_text" href="{{ url_for('prefectures_view') }}"></a>
         <h1>北海道</h1>
         <a class="spot_text" href="categorias_view">HOME</a>
     </header>
@@ -28,11 +29,10 @@
     <!-- スポット一覧を表示 -->
      <div class="spot_section">
         <ul class="spot_list">
-            <li>知床</li>
-            <li>熊石海岸</li>
-            <li>かなやま湖</li>
-            <li>音別海岸部</li>
-            <li>広尾町</li>
+          {% for spot in spots %}
+            <li>{{ spot }}</li>
+          {% endfor %}
+            
         </ul>
      </div>
 

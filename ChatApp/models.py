@@ -247,7 +247,7 @@ class Prefecture:
     def get_all(cls):
         conn = db_pool.get_conn()
         try:
-            with conn.crusor() as cur:
+            with conn.cursor() as cur:
                 sql = "SELECT * FROM categories;"
                 cur.execute(sql)
                 prefectures = cur.fetchall()
