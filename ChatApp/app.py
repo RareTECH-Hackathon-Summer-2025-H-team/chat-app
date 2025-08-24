@@ -115,17 +115,16 @@ def categories_view():
     return render_template('auth/categories.html')
 
 
-# # カテゴリ内の都道府県一覧表示
+# # カテゴリ内の都道府県一覧表示/roku
 @app.route('/categories/<cid>', methods=['GET'])
 def prefectures_view(cid):
-    category_id = session.get(cid)
+    # cid = session.get(cid)セッションは不要？？
     if cid is None:
         return redirect(url_for('spots_view'))
     
     category = Category.find_by_cid(cid)                #←ここ確認
 
-
-    return render_template('/auth/prefectures.html', category=category)   #←ここ確認
+    return render_template('auth/prefectures.html', category=category)   #←ここ確認
 
 
 # 特定の都道府県内のスポットルーム一覧表示 /やんみー
