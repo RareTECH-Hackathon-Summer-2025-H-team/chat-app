@@ -4,8 +4,11 @@
 <div class="wrapper">
     <header class="auth-header">
         <!-- <a class="spot_text" href="prefectures_view">＜海</a> -->
-        <a class="spot_text" href="{{ url_for('prefectures_view') }}"><</a>
+        <a class="spot_text" href="{{ url_for('prefectures_view') }}"></a>
         <h1>
+          {% for prefecture in prefectures %}
+            <h3>{{ prefecture.id }} : {{ prefecture.name }}</h3>
+          {% endfor %}
           <!-- <li>spots.pid</li>  どうやって都道府県の文字を動的に表示させれば良いか質問する！！！--> 
         </h1>
         <!-- <a class="spot_text" href="categorias_view">HOME</a> -->
