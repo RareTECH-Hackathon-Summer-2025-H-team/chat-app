@@ -56,17 +56,17 @@ class Spot:
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
-            abort(500)
+            about(500)
         finally:
             db_pool.release(conn)
     
     @classmethod
-    def get_all(cls, cid, pid):
+    def get_all(cls):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM spots WHERE cid=%s and pid=%s;"
-                cur.execute(sql, (cid, pid,))
+                sql = "SELECT * FROM spots;"
+                cur.execute(sql)
                 spots = cur.fetchall()
                 return spots
         except pymysql.Error as e:
@@ -83,22 +83,6 @@ class Spot:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM spots WHERE id=%s;"
                 cur.execute(sql, (sid,))
-                spot = cur.fetchone()
-                return spot
-        except pymysql.Error as e:
-            print(f'エラーが発生しています:{e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
-
-# 追加/roku
-    @classmethod
-    def find_by_cid(cls, cid):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = "SELECT * FROM spots WHERE cid=%s;"
-                cur.execute(sql, (cid,))
                 spot = cur.fetchone()
                 return spot
         except pymysql.Error as e:
@@ -226,12 +210,12 @@ class Category:
 
 
     @classmethod
-    def find_by_cid(cls, id):
+    def find_by_cid(cls, cid):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM categories WHERE id=%s;"
-                cur.execute(sql, (id,))
+                cur.execute(sql, (cid,))
                 category = cur.fetchone()
                 return category
         except pymysql.Error as e:
