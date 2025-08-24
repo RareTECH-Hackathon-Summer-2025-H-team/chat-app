@@ -5,7 +5,12 @@ import uuid
 import re
 import os
 
-from models import User, Category, Prefecture, Message, Spot
+<<<<<<< HEAD
+from models import User, Spot, Category, Prefecture, Message
+=======
+
+from models import User, Spot, Category, Prefecture#, Message
+>>>>>>> main
 from util.assets import bundle_css_files
 
 
@@ -115,54 +120,99 @@ def categories_view():
 def prefectures_view(cid):
     # cid = session.get(cid)セッションは不要？？
     if cid is None:
-        # print(f'cidを表示:{cid}')
-        return redirect(url_for('login_view'))
+        return redirect(url_for('spots_view'))
     
-    # 引数をid→cidにしたら動いたけどなぜなのか不明。
     category = Category.find_by_cid(cid)                #←ここ確認
 
     return render_template('auth/prefectures.html', category=category)   #←ここ確認
 
 
 # 特定の都道府県内のスポットルーム一覧表示 /やんみー
-@app.route('/spots/<cid>/<pid>', methods=['GET'])
-def spots_view(cid,pid):
-    category_id = session.get(cid)
-    prefecture_id = session.get(pid)
-    if category_id is None or prefecture_id is None:
+# @app.route('/spots/<cid>/<pid>', methods=['GET'])
+# def spots_view(cid,pid):
+#     category_id = session.get(cid)
+#     prefecture_id = session.get(pid)
+#     if category_id is None or prefecture_id is None:
+#         return redirect(url_for('login_view'))
+    
+#     # category = Category.find_by_cid(cid)
+#     # prefecture = Prefecture.find_by_pid(pid)
+#     spots = Spot.find_by_spot_name(cid, pid)
+#     print(f'スポットを表示 : {spots}')
+#     return render_template('/auth/spots_id.html', spots=spots)                #←ここ確認
+
+# """
+@app.route('/spots', methods=['GET'])
+def spots_view():
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
     
-    category = Category.find_by_cid(cid)
-    prefecture = Prefecture.find_by_pid(pid)
+    spots= Spot.get_all()
 
-    return render_template('/auth/spots_id.html', category=category, prefecture=prefecture)                #←ここ確認
+    return render_template('/auth/spots_id.html', spots=spots)  
+# """
+
+# @app.route('/spots', methods=[GET])
+# def add_spot_room():
+
 
 
 # #スポットルームの作成
-# @app.route('/spots/<category_id/<prefecture_id>', methods=['POST'])     #←ここ確認
-# def create_spot_room(spot_id):
-#     if spot_id is None:
+# @app.route('/spots', methods=['POST'])     #←ここ確認
+# def create_spot_room(sid):
+#     uid = session.get('uid')
+#     if uid is None:
 #         return redirect(url_for('login_view'))
     
-#     spot_name = request.fort.get('spotTitle')                           #←ここ確認
+#     spot_name = request.form.get('spotTitle')                           #←ここ確認
 #     spot = Spot.find_by_name(spot_name)
 #     if spot == None:
-#         Spot.create(category_id, prefecture_id, spot_name)               #←ここ確認
-#         return redirect(url_for('spots_view'))
+#         Spot.create(cid, pid, spot_name)               #←ここ確認
+#         return redirect(url_for('create_view'))
 #     else:
 #         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
 
 
+<<<<<<< HEAD
 # スポットルームの表示/roku
-@app.route('/spot_id', methods=['GET'])
+@app.route('/spot_id/<sid>/', methods=['GET'])
 def spot_room_view():
     spot_id=session.get('sid')
     if spot_id is None:
         return redirect(url_for('prefectures_view'))
     return render_template('spot_id.html')
+=======
+# メッセージルームの表示
+@app.route('/spots/<sid>/messages', methods=['GET'])
+def spot_room_view(sid):
+    uid =session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    spot = Spot.find_by_sid(sid)
+    messages = Message.get_all(sid)
+>>>>>>> main
 
-# @app.route('/messages/<spot_id>', methods=['GET'])                      #←ここ確認
-# def spot_room_view(spot_id):
+    return render_template('message.html', messages=messages, spot=spot, uid=uid)
+
+# メッセージの投稿
+@app.route('/spots/<sid>/,messages', methods=['POST'])
+def create_message(sid):
+    uid = session('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    message = request.form.get('messages')
+
+    if message:
+        Message.create(uid, sid, message)
+
+    return redirect('/spots/{sid}/messages' .format(sid = sid))    
+
+
+# @app.route('/messages/<sid>', methods=['GET'])                      #←ここ確認
+# def spot_room_view(sid):
 #     spot_id = session.get(spot_id)
 #     if spot_id is None:
 #         return redirect(url_for('login_view'))

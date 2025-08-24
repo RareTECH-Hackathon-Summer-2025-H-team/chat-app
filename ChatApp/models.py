@@ -61,12 +61,12 @@ class Spot:
             db_pool.release(conn)
     
     @classmethod
-    def get_all(cls):
+    def get_all(cls, cid, pid):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM spots;"
-                cur.execute(sql)
+                sql = "SELECT * FROM spots WHERE cid=%s and pid=%s;"
+                cur.execute(sql, (cid, pid,))
                 spots = cur.fetchall()
                 return spots
         except pymysql.Error as e:
@@ -263,7 +263,7 @@ class Prefecture:
     def get_all(cls):
         conn = db_pool.get_conn()
         try:
-            with conn.crusor() as cur:
+            with conn.cursor() as cur:
                 sql = "SELECT * FROM categories;"
                 cur.execute(sql)
                 prefectures = cur.fetchall()
