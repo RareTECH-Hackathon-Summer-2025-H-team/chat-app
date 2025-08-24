@@ -5,12 +5,7 @@ import uuid
 import re
 import os
 
-<<<<<<< HEAD
 from models import User, Spot, Category, Prefecture, Message
-=======
-
-from models import User, Spot, Category, Prefecture#, Message
->>>>>>> main
 from util.assets import bundle_css_files
 
 
@@ -174,15 +169,6 @@ def spots_view():
 #         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
 
 
-<<<<<<< HEAD
-# スポットルームの表示/roku
-@app.route('/spot_id/<sid>/', methods=['GET'])
-def spot_room_view():
-    spot_id=session.get('sid')
-    if spot_id is None:
-        return redirect(url_for('prefectures_view'))
-    return render_template('spot_id.html')
-=======
 # メッセージルームの表示
 @app.route('/spots/<sid>/messages', methods=['GET'])
 def spot_room_view(sid):
@@ -192,7 +178,6 @@ def spot_room_view(sid):
     
     spot = Spot.find_by_sid(sid)
     messages = Message.get_all(sid)
->>>>>>> main
 
     return render_template('message.html', messages=messages, spot=spot, uid=uid)
 
