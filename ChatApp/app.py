@@ -6,7 +6,7 @@ import re
 import os
 
 
-from models import User, Spot, Message
+from models import User, Spot, Category, Prefecture#, Message
 from util.assets import bundle_css_files
 
 
@@ -132,10 +132,25 @@ def spots_view(cid,pid):
     if category_id is None or prefecture_id is None:
         return redirect(url_for('login_view'))
     
-    category = Category.find_by_cid(cid)
-    prefecture = Prefecture.find_by_pid(pid)
+    # category = Category.find_by_cid(cid)
+    # prefecture = Prefecture.find_by_pid(pid)
+    spots = Spot.find_by_spot_name(cid, pid)
+    print(f'スポットを表示 : {spots}')
+    return render_template('/auth/spots_id.html', spots=spots)                #←ここ確認
 
-    return render_template('/auth/spots_id.html', category=category, prefecture=prefecture)                #←ここ確認
+"""
+@app.route('/spots>', methods=['GET'])
+def spots_view():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    spots= Spot.get_all()
+
+    return render_template('/auth/spots_id.html', spots=spots)  
+"""
+
+
 
 
 # #スポットルームの作成
