@@ -5,7 +5,7 @@ import uuid
 import re
 import os
 
-from models import User, Spot, Category, Prefecture#, Message
+from models import User, Spot, Category, Prefecture, Message
 from util.assets import bundle_css_files
 
 
@@ -117,28 +117,28 @@ def prefectures_view(cid):
     if cid is None:
         return redirect(url_for('login_view'))
     
-    category = category.find_by_category_id(cid)                #←ここ確認
+    category = Category.find_by_cid(cid)                #←ここ確認
 
 
     return render_template('/auth/prefectures.html', category=category)   #←ここ確認
 
 
 # 特定の都道府県内のスポットルーム一覧表示 /やんみー
-@app.route('/spots/<cid>/<pid>', methods=['GET'])
-def spots_view(cid,pid):
-    category_id = session.get(cid)
-    prefecture_id = session.get(pid)
-    if category_id is None or prefecture_id is None:
-        return redirect(url_for('login_view'))
+# @app.route('/spots/<cid>/<pid>', methods=['GET'])
+# def spots_view(cid,pid):
+#     category_id = session.get(cid)
+#     prefecture_id = session.get(pid)
+#     if category_id is None or prefecture_id is None:
+#         return redirect(url_for('login_view'))
     
-    # category = Category.find_by_cid(cid)
-    # prefecture = Prefecture.find_by_pid(pid)
-    spots = Spot.find_by_spot_name(cid, pid)
-    print(f'スポットを表示 : {spots}')
-    return render_template('/auth/spots_id.html', spots=spots)                #←ここ確認
+#     # category = Category.find_by_cid(cid)
+#     # prefecture = Prefecture.find_by_pid(pid)
+#     spots = Spot.find_by_spot_name(cid, pid)
+#     print(f'スポットを表示 : {spots}')
+#     return render_template('/auth/spots_id.html', spots=spots)                #←ここ確認
 
-"""
-@app.route('/spots>', methods=['GET'])
+# """
+@app.route('/spots', methods=['GET'])
 def spots_view():
     uid = session.get('uid')
     if uid is None:
@@ -147,28 +147,31 @@ def spots_view():
     spots= Spot.get_all()
 
     return render_template('/auth/spots_id.html', spots=spots)  
-"""
+# """
 
+# @app.route('/spots', methods=[GET])
+# def add_spot_room():
 
 
 
 # #スポットルームの作成
-# @app.route('/spots/<category_id/<prefecture_id>', methods=['POST'])     #←ここ確認
-# def create_spot_room(spot_id):
-#     if spot_id is None:
+# @app.route('/spots', methods=['POST'])     #←ここ確認
+# def create_spot_room(sid):
+#     uid = session.get('uid')
+#     if uid is None:
 #         return redirect(url_for('login_view'))
     
-#     spot_name = request.fort.get('spotTitle')                           #←ここ確認
+#     spot_name = request.form.get('spotTitle')                           #←ここ確認
 #     spot = Spot.find_by_name(spot_name)
 #     if spot == None:
-#         Spot.create(category_id, prefecture_id, spot_name)               #←ここ確認
-#         return redirect(url_for('spots_view'))
+#         Spot.create(cid, pid, spot_name)               #←ここ確認
+#         return redirect(url_for('create_view'))
 #     else:
 #         flash('既に同じ名前のチャンネルが存在しています')                      #←ここ確認
 
 
 # スポットルームの表示/roku
-@app.route('/spot_id', methods=['GET'])
+@app.route('/spot_id/<sid>/', methods=['GET'])
 def spot_room_view():
     spot_id=session.get('sid')
     if spot_id is None:

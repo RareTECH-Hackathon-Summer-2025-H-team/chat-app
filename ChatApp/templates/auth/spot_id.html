@@ -4,21 +4,25 @@
 <div class="wrapper">
     <header class="auth-header">
         <!-- <a class="spot_text" href="prefectures_view">＜海</a> -->
-        <a class="spot_text" href="{{ url_for('prefectures_view') }}"></a>
-        <h1>北海道</h1>
-        <a class="spot_text" href="categorias_view">HOME</a>
+        <a class="spot_text" href="{{ url_for('prefectures_view') }}"><</a>
+        <h1>
+          <!-- <li>spots.pid</li>  どうやって都道府県の文字を動的に表示させれば良いか質問する！！！--> 
+        </h1>
+        <!-- <a class="spot_text" href="categorias_view">HOME</a> -->
+        <a class="spot_text" href="{{ url_for('categories_view') }}">HOME</a>
     </header>
     <!-- スポット追加「＋」 -->
      <div class="add_spot">
-        <a class="add_spot" href="spots_view">＋</a>
+        <a class="add_spot" href="{{ url_for('add_spot_room') }}">＋</a>
      </div>
     <!-- スポット一覧を表示 -->
      <div class="spot_section">
         <ul class="spot_list">
           {% for spot in spots %}
-            <li>{{ spot.spot_name }}</li>
+            <li>
+              <a href="{{ spot.spot_name }}"></a>
+            </li>
           {% endfor %}
-            
         </ul>
      </div>
 
