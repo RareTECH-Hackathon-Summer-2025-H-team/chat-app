@@ -160,9 +160,9 @@ class Message:
        try:
            with conn.cursor() as cur:
                sql = """
-                   SELECT id, u.uid, name, message 
+                   SELECT u.id, m.uid, name, message 
                    FROM messages AS m 
-                   INNER JOIN users AS u ON m.uid = u.uid 
+                   INNER JOIN users AS u ON m.uid = u.id 
                    WHERE sid = %s 
                    ORDER BY id ASC;
                """

@@ -144,8 +144,8 @@ def spots_view():
         return redirect(url_for('login_view'))
     
     spots= Spot.get_all()
-
-    return render_template('/auth/spots_id.html', spots=spots)  
+    print(spots)
+    return render_template('auth/spot_id.html', spots=spots)  
 # """
 
 # @app.route('/spots', methods=[GET])
