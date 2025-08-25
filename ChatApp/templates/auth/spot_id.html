@@ -1,13 +1,13 @@
 {% extends 'auth/base.html' %} {% block title %}
 <title>釣りスポット選択</title>
-{% end block %}{% block body %}
+{% endblock %}{% block body %}
 <div class="wrapper">
     <header class="auth-header">
         <!-- <a class="spot_text" href="prefectures_view">＜海</a> -->
-        <a class="spot_text" href="{{ url_for('prefectures_view') }}"></a>
+        <!-- <a class="spot_text" href="prefectures_view "></a> -->
         <h1>
-          {% for prefecture in prefectures %}
-            <h3>{{ prefecture.id }} : {{ prefecture.name }}</h3>
+          {% for spot in spots %}
+            <h3>{{ spot_id }} </h3>
           {% endfor %}
           <!-- <li>spots.pid</li>  どうやって都道府県の文字を動的に表示させれば良いか質問する！！！--> 
         </h1>
@@ -16,14 +16,14 @@
     </header>
     <!-- スポット追加「＋」 -->
      <div class="add_spot">
-        <a class="add_spot" href="{{ url_for('add_spot_room') }}">＋</a>
+        <a class="add_spot" href="add_spot_room">＋</a>
      </div>
     <!-- スポット一覧を表示 -->
      <div class="spot_section">
         <ul class="spot_list">
           {% for spot in spots %}
             <li>
-              <a href="{{ spot.spot_name }}"></a>
+              <a href="">{{ spot.spot_name }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -37,4 +37,4 @@
 
 </div>
 </body>
-{% end block %}
+{% endblock %}
